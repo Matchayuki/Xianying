@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#10121c"><meta name="description" content="用形状表达此刻，把难以开口的感受，整理成可以分享的话。">
+  <title>EchoGlow · 回声微光</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="core.js" defer></script><script src="visual.js" defer></script><script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">跳到内容</a>
+<div class="shell">
+  <aside class="sidebar">
+    <a href="#" class="brand" aria-label="EchoGlow 首页"><span class="brand-mark" aria-hidden="true">◒</span><span>EchoGlow<small>回 声 微 光</small></span></a>
+    <div class="side-caption">一个容纳此刻的地方</div>
+    <nav aria-label="主要功能">
+      <button class="nav-item active" data-view="echo" aria-current="page"><span class="nav-number">01</span><span>情绪显影<small>让感受有形状</small></span><span class="nav-arrow">↗</span></button>
+      <button class="nav-item" data-view="translate"><span class="nav-number">02</span><span>双轨转译<small>把感受传递出去</small></span><span class="nav-arrow">↗</span></button>
+      <button class="nav-item" data-view="breathe"><span class="nav-number">03</span><span>微光呼吸<small>留一点时间给自己</small></span><span class="nav-arrow">↗</span></button>
+    </nav>
+    <div class="sidebar-bottom"><span class="tiny-orbit" aria-hidden="true">✳</span><p>不必一次说清楚。<br>从一个词开始，也可以。</p><div class="privacy-dot">仅保存在这台设备</div><button id="open-data" class="text-button">管理本地记录 <span>↗</span></button></div>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="topbar"><span id="view-kicker">YOUR INNER WEATHER / 内心天气</span><div><span id="save-status" role="status">本地模式</span><span class="top-dot"></span><time id="today"></time></div></header>
+    <section id="view-echo" class="view" aria-labelledby="echo-title">
+      <div class="view-heading"><div><p class="eyebrow">01 — 情绪显影</p><h1 id="echo-title">此刻，你的世界是什么样？</h1><p class="subtitle">选一些贴近你的词。不需要解释，也没有正确答案。</p></div><span class="edition">ECHO / 001</span></div>
+      <div class="workspace">
+        <div class="art-column">
+          <div class="weather-stage" id="weather-stage">
+            <div class="stage-top"><span><i class="live-dot"></i> <span id="weather-label">未命名的天气</span></span><button id="motion-toggle" class="quiet-button" aria-pressed="false">暂停画面 Ⅱ</button></div>
+            <canvas id="echo-canvas" aria-label="随情绪选择与压迫感变化的抽象粒子显影"></canvas>
+            <div class="stage-word" aria-hidden="true" id="stage-word">在这里</div>
+            <div class="stage-bottom"><span id="stage-caption">给此刻一点空间</span><span>由你的感受构成 <span aria-hidden="true">↗</span></span></div>
+          </div>
+          <div class="poem-panel"><div class="panel-caption"><span>另一种说法 <span class="poem-caption-en">/ IN OTHER WORDS</span></span><button class="text-button" id="copy-poem">复制文字 ↗</button></div><h2 id="poem-title">还没有名字的此刻</h2><p id="poem" class="poem">有些感受，还没有名字。<br>你可以慢慢找到它的形状。</p><div class="poem-footer"><span id="poem-status">选择右侧碎片，生成你的通感诗译</span><button class="text-button" id="to-translate">把它转成一张卡片 <span>→</span></button></div></div>
+        </div>
+        <div class="controls-column">
+          <section class="control-section energy-section" aria-labelledby="energy-title"><div class="section-label"><h2 id="energy-title">今天还剩多少电量</h2><span><strong id="energy-number">35</strong><span class="muted"> / 100</span></span></div><input id="energy" type="range" min="0" max="100" value="35" aria-label="今日情绪电量"><div class="range-captions"><span>需要休息</span><span id="energy-label">低能量</span><span>还有余力</span></div></section>
+          <section class="control-section"><div class="section-label"><h2>哪种质感更接近你</h2><span class="muted">选一个 · 可以不选</span></div><div id="texture-options" class="texture-grid" role="group" aria-label="存在质感"></div></section>
+          <section class="control-section feelings-section"><div class="section-label"><h2>还有这些感觉吗</h2><span class="muted">可多选</span></div><div id="feeling-options" class="chips" role="group" aria-label="时空感觉"></div></section>
+          <details class="body-details"><summary><span>身体也有话想说</span><span id="pressure-summary">调节压迫感 ＋</span></summary><div class="pressure-fields" id="pressure-fields"></div><p class="field-hint">0 表示没有，100 表示你能想象的最强感受。不是医学评分。</p></details>
+          <button class="primary-button generate-button" id="generate">让此刻显影 <span>↗</span></button><p class="under-button" id="selection-summary">不用选完，随时都可以开始</p>
+        </div>
+      </div>
+    </section>
+    <section id="view-translate" class="view" hidden aria-labelledby="translate-title">
+      <div class="view-heading"><div><p class="eyebrow">02 — 双轨转译</p><h1 id="translate-title">有些话，可以换一种方式说。</h1><p class="subtitle">你决定说多少，也决定希望对方怎样回应。</p></div></div>
+      <div class="translation-layout">
+        <div class="translation-controls">
+          <div class="section-label"><h2>这张卡片，想交给谁</h2></div><div class="recipient-switch" role="group" aria-label="转译对象"><button class="active" data-recipient="friend" aria-pressed="true">亲友</button><button data-recipient="doctor" aria-pressed="false">医生</button></div>
+          <div id="friend-controls"><h3>此刻，我更希望</h3><div id="support-options" class="support-options" role="group" aria-label="希望获得的支持"></div><label class="check-row"><input id="include-body" type="checkbox"> 在亲友卡中提及身体感受</label></div>
+          <div id="doctor-controls" hidden><label for="duration">这些感受持续了多久</label><select id="duration"><option value="">暂时不确定</option><option>今天开始</option><option>几天</option><option>一到两周</option><option>两周以上</option></select><p class="field-hint">只整理你填写的感受，不推断症状或诊断。</p></div>
+          <label for="personal-note" class="note-label">还有想补充的话 <span class="muted">选填</span></label><textarea id="personal-note" maxlength="500" rows="4" placeholder="比如：今天暂时接不了电话，可以先发消息吗？"></textarea><span class="note-count" id="note-count">0 / 500</span>
+          <button id="refresh-card" class="secondary-button">重新整理卡片 ↻</button><p class="field-hint">右侧文字可直接编辑。改好后，再复制或保存图片。</p>
+        </div>
+        <div class="card-column"><div class="panel-caption"><span id="card-caption">一张留给亲友的便笺</span><span>可编辑</span></div><div class="message-paper"><div class="paper-top"><span>EchoGlow <small>回声微光</small></span><span id="card-date"></span></div><div class="letter-heading"><span id="letter-category">A LITTLE NOTE FOR YOU</span><h2 id="letter-title">今天，借一张纸开口。</h2><span class="letter-seal" aria-hidden="true">◒</span></div><label class="sr-only" for="card-editor">卡片正文</label><textarea id="card-editor" spellcheck="false" maxlength="5000"></textarea><div class="paper-footer"><span>不必一次说清楚。<small>谢谢你，愿意听见此刻的我。</small></span><span aria-hidden="true">✳</span></div><div class="paper-bottom"><span>MY FEELINGS, IN MY OWN WORDS.</span><span>一 点 微 光</span></div></div><div class="card-actions"><button id="copy-card" class="secondary-button">复制文字 ↗</button><button id="download-card" class="primary-button">保存卡片图片 ↓</button></div><p class="field-hint centered">只分享你愿意分享的部分。</p></div>
+      </div>
+    </section>
+    <section id="view-breathe" class="view" hidden aria-labelledby="breath-title">
+      <div class="view-heading"><div><p class="eyebrow">03 — 微光呼吸</p><h1 id="breath-title">这一分钟，不用赶路。</h1><p class="subtitle">按自己的舒适程度跟随。也可以只安静地待一会儿。</p></div><button id="sound-toggle" class="secondary-button" aria-pressed="false">开启海浪声 ♫</button></div>
+      <div class="breath-space"><div class="breath-meta"><span id="breath-session">还没有开始</span><span id="breath-cycles">0 次完整呼吸</span></div><div class="breath-orbit"><div id="breath-glow"></div><div class="breath-center"><p id="breath-phase">准备好了，再开始</p><span id="breath-count">✳</span><small id="breath-next">跟随你的节奏</small></div></div><div class="breath-patterns" role="group" aria-label="呼吸节奏"><button class="active" data-pattern="soft" aria-pressed="true">轻缓 <span>吸 4 · 呼 6</span></button><button data-pattern="classic" aria-pressed="false">经典 <span>吸 4 · 停 4 · 呼 4</span></button></div><div class="breath-actions"><button class="primary-button" id="breath-start">开始呼吸 <span>→</span></button><button class="text-button" id="breath-reset">重新开始 ↻</button></div><p class="field-hint centered">不必用力深呼吸；如果不舒服，可以随时停下。</p></div>
+    </section>
+    <footer class="main-footer"><span>ECHOGLOW — 给难以言说的感受，一点微光。</span><span>本地生成 · 无需登录</span></footer>
+  </main>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<dialog id="data-dialog"><form method="dialog"><button class="dialog-close" aria-label="关闭">×</button><p class="eyebrow">留在自己的手里</p><h2>本地记录</h2><p>你的选择和卡片草稿只保存在当前浏览器。你可以下载一份副本，或清除这台设备上的 EchoGlow 记录。</p><button type="button" id="export-data" class="secondary-button">下载记录副本 ↓</button><button type="button" id="clear-data" class="danger-button">清除本地记录</button><p class="field-hint" id="data-feedback">清除会重置情绪选择和卡片草稿，不影响已下载的文件。</p></form></dialog>
+</body></html>
