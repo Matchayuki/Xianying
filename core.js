@@ -19,9 +19,10 @@
     message:['先用文字联系','可以先用文字和我联系吗？现在说话有点费力。'],
     practical:['帮我处理一件小事','有件小事想请你搭把手，我再跟你说具体是什么。']
   };
-  const defaults = () => ({version:2,texture:'',feelings:[],energy:35,pressure:{chest:0,head:0,limbs:0},supports:[],note:'',duration:'',includeBody:false,poem:'',friendDraft:null,doctorDraft:null});
+  const defaults = () => ({version:3,texture:'',feelings:[],energy:50,pressure:{chest:0,head:0,limbs:0},supports:[],note:'',duration:'',functioning:'',includeBody:false,poem:'',friendDraft:null,doctorDraft:null});
   const clamp = (v,fallback=0) => typeof v==='number' && Number.isFinite(v) ? Math.max(0,Math.min(100,Math.round(v))) : fallback;
   const durations = ['','今天开始','几天','一到两周','两周以上'];
+  const functioningLevels = ['','基本没有影响','有些事情变得困难','已经明显影响学习、工作或生活','几乎无法维持日常生活'];
   const bodyNames = {chest:'胸口',head:'头部',limbs:'四肢'};
   function normalize(raw) {
     const s=defaults();
@@ -29,10 +30,11 @@
     if (textures.some(t=>t[0]===raw.texture)) s.texture=raw.texture;
     s.feelings=Array.isArray(raw.feelings)?[...new Set(raw.feelings.filter(f=>feelings.includes(f)))]:[];
     s.supports=Array.isArray(raw.supports)?[...new Set(raw.supports.filter(f=>Object.hasOwn(supports,f)))]:[];
-    s.energy=clamp(raw.energy,35);
+    s.energy=clamp(raw.energy,50);
     for(const k of Object.keys(bodyNames)) s.pressure[k]=clamp(raw.pressure?.[k]);
     s.note=typeof raw.note==='string'?raw.note.slice(0,500):'';
     s.duration=durations.includes(raw.duration)?raw.duration:'';
+    s.functioning=functioningLevels.includes(raw.functioning)?raw.functioning:'';
     s.includeBody=raw.includeBody===true;
     s.poem=typeof raw.poem==='string'?raw.poem.slice(0,2000):'';
     for(const key of ['friendDraft','doctorDraft']) s[key]=typeof raw[key]==='string'?raw[key].slice(0,5000):null;
@@ -41,7 +43,7 @@
   function migrate(raw) {
     const tags=Array.isArray(raw?.tags)?raw.tags:[];
     const pct=[35,55,72,88,20];
-    return normalize({texture:tags.find(t=>textures.some(a=>a[0]===t)),feelings:tags.filter(t=>feelings.includes(t)),pressure:raw?.pressure,energy:Number.isInteger(raw?.batteryIdx)?pct[raw.batteryIdx]:35});
+    return normalize({texture:tags.find(t=>textures.some(a=>a[0]===t)),feelings:tags.filter(t=>feelings.includes(t)),pressure:raw?.pressure,energy:Number.isInteger(raw?.batteryIdx)?pct[raw.batteryIdx]:50});
   }
   function energyLabel(n) { return n<=20?'很需要休息':n<=40?'低能量':n<=60?'慢慢来':n<=80?'有一点余力':'电量充足'; }
   const poetry = {
@@ -57,11 +59,12 @@
     '碎玻璃':{title:'还没拼成句子的光',material:'断面 · 锐边 · 多向折射',lines:['感受散成很多碎片，\n每一片都映着不同的事情。','我很难把它们拼成顺畅的一句话，\n一开口，就碰到一些锋利的边。','光线被分成了很多方向，\n我不知道该先指向哪一片。'],end:['我可以一小片、一小片地说。','请不用替我整理好，先听这些零散的话。','这张不完整的描述，也能表达一部分的我。']}
   };
   const feelingLines={'时间凝滞':'钟还在走，我的这一刻却被拉得很长。','声音遥远':'你的声音，像从很远的走廊传来。','世界褪色':'那些熟悉的颜色，也退到了背景里。','身体不是自己的':'我和自己的身体之间，似乎隔了一小段距离。','被监视':'我有一种被注视的不安，很难松弛下来。','想消失':'我有想从一切里退开的念头，不太知道怎么说。','想蜷缩':'我想把自己缩小一点，先少承受一些。','无法开口':'这些字，正在替暂时开不了口的我说话。'};
+  function needsSafetyCheck(s) { return s.feelings.includes('想消失'); }
   function poem(s,variation=0) {
     const n=Math.max(0,Math.floor(Number(variation)||0));
     const p=poetry[s.texture];
     const opening=p?p.lines[n%p.lines.length]:'此刻，我还没有找到合适的词。\n但我已经为自己，留了一点空间。';
-    const chosen=s.feelings.length?s.feelings[n%s.feelings.length]:null;
+    const chosen=needsSafetyCheck(s)?'想消失':s.feelings.length?s.feelings[n%s.feelings.length]:null;
     const middle=chosen?feelingLines[chosen]:s.energy<=20?'今天可以使用的力气，比平常少很多。':null;
     const closing=p?p.end[Math.floor(n/3+n)%p.end.length]:'我想先把这些留在这里，等合适的时候再说。';
     return [opening,middle,closing].filter(Boolean).join('\n\n');
@@ -81,20 +84,29 @@
   };
   const spokenFeelings={'时间凝滞':'时间过得特别慢。','声音遥远':'周围的声音听起来很远。','世界褪色':'身边的东西好像都没什么颜色了。','身体不是自己的':'有时感觉身体不像自己的。','被监视':'总有一种被人盯着的不安。','想消失':'有想消失的念头。','想蜷缩':'只想找个地方蜷着。','无法开口':'有话想说，可就是开不了口。'};
   function describeFeelings(s){const lines=[];if(s.texture)lines.push(spokenTextures[s.texture]);for(const f of s.feelings){if((s.texture==='褪色'&&f==='世界褪色')||(s.texture==='石化'&&f==='无法开口'))continue;lines.push(spokenFeelings[f]);}return lines.join('');}
-  function friendCard(s) {
-    const description=describeFeelings(s),lines=[];
+  const safetyMessages={
+    thoughts:'我现在有伤害自己的想法，但不会马上行动。我不想一个人待着，请现在回复或联系我，陪我一起寻找专业帮助。',
+    immediate:'我现在可能会伤害自己，或已经开始行动。请立即联系我，并帮我拨打急救电话或前往最近的急诊。'
+  };
+  function friendCard(s,safety='') {
+    const description=describeFeelings(safetyMessages[safety]?{...s,feelings:s.feelings.filter(f=>f!=='想消失')}:s),lines=[];
+    if(safetyMessages[safety])lines.push(safetyMessages[safety]);
     if(description)lines.push('我现在'+description);
     else lines.push('想跟你说说我现在的状态，不过还没找到合适的词。');
     if(s.energy<=20)lines.push('今天实在没剩多少力气，可能会回得慢一点。');
     if(s.includeBody){const parts=Object.entries(bodyNames).filter(([k])=>s.pressure[k]>0).map(([k,n])=>n+(s.pressure[k]>=65?'压得很难受':s.pressure[k]>=30?'有些压迫感':'有一点压迫感'));if(parts.length)lines.push(parts.join('，')+'。');}
     if(s.supports.length)lines.push(s.supports.map(k=>supports[k][1]).join('\n'));
     if(s.note.trim())lines.push(s.note.trim());
-    if(!s.supports.length&&!s.note.trim())lines.push('还没想好要怎么聊，先告诉你一声。');
+    if(!s.supports.length&&!s.note.trim())lines.push(safetyMessages[safety]?'请回复我一句，让我知道你看到了。':'暂时不用解决问题，请回复我一句，让我知道你看到了。');
     return lines.join('\n\n');
   }
-  function doctorCard(s) {
-    const lines=['医生，有些感受我当面可能说不清，所以先写下来。',describeFeelings(s)||'现在还不太能描述清楚自己的感受。'];
+  function doctorCard(s,safety='') {
+    const description=describeFeelings(safetyMessages[safety]?{...s,feelings:s.feelings.filter(f=>f!=='想消失')}:s);
+    const lines=['医生，有些感受我当面可能说不清，所以先写下来。',description||'现在还不太能描述清楚自己的感受。'];
+    if(safety==='safe'&&needsSafetyCheck(s))lines.push('关于“想消失”：目前没有伤害自己的打算，只是很想暂时躲开压力。');
+    if(safetyMessages[safety])lines.push('安全情况：'+safetyMessages[safety]);
     if(s.duration)lines.push('持续时间：'+s.duration+'。');
+    if(s.functioning)lines.push('对日常生活的影响：'+s.functioning+'。');
     lines.push('如果用电量来形容，我觉得自己大约还有 '+s.energy+' / 100。');
     const body=Object.keys(bodyNames).filter(k=>s.pressure[k]>0);if(body.length)lines.push('身体方面，我记录到的压迫感：\n'+bodyLines(s).filter((_,i)=>s.pressure[Object.keys(bodyNames)[i]]>0).join('\n')+'\n这是我自己的感受强度，不是量表评分。');
     if(s.note.trim())lines.push(s.note.trim());
@@ -108,6 +120,6 @@
     const [label,seconds]=phases[index],fraction=offset/(seconds*1000);
     return {label,remaining:Math.max(1,Math.ceil(seconds-offset/1000)),next:phases[(index+1)%phases.length][0],cycles:Math.floor(Math.max(0,ms)/total),scale:label==='吸气'?.85+.25*fraction:label==='呼气'?1.1-.25*fraction:1.1};
   }
-  const api={textures,feelings,supports,bodyNames,poetry,defaults,normalize,migrate,energyLabel,poem,friendCard,doctorCard,breathAt};
+  const api={textures,feelings,supports,bodyNames,poetry,safetyMessages,defaults,normalize,migrate,energyLabel,needsSafetyCheck,poem,friendCard,doctorCard,breathAt};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.EchoCore=api;
 })(typeof window==='undefined'?this:window);
