@@ -1,6 +1,7 @@
 # EchoGlow · 回声微光 / Studio
 
 > 这是一款帮助用户整理感受并生成沟通文字的本地网页工具，不提供诊断、治疗或紧急服务。
+链接🔗https://matchayuki.github.io/EchoGlow-Studio/
 
 ## 3.0 改进
 
