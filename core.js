@@ -121,5 +121,5 @@
     return {label,remaining:Math.max(1,Math.ceil(seconds-offset/1000)),next:phases[(index+1)%phases.length][0],cycles:Math.floor(Math.max(0,ms)/total),scale:label==='吸气'?.85+.25*fraction:label==='呼气'?1.1-.25*fraction:1.1};
   }
   const api={textures,feelings,supports,bodyNames,poetry,safetyMessages,defaults,normalize,migrate,energyLabel,needsSafetyCheck,poem,friendCard,doctorCard,breathAt};
-  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.EchoCore=api;
+  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.XianyingCore=api;
 })(typeof window==='undefined'?this:window);

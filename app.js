@@ -1,9 +1,9 @@
 'use strict';
-const C=window.EchoCore, $=id=>document.getElementById(id), KEY='echoglow_studio_v2';
+const C=window.XianyingCore, $=id=>document.getElementById(id), KEY='xianying_studio_v2', LEGACY_KEYS=['echoglow_studio_v2','echoglow_state'];
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 let state=C.defaults(), storageWorks=true, remember=false, riskLevel='', currentView='echo', recipient='friend', toastTimer, saveTimer, variation=0, clearArmed=false;
-try{const saved=localStorage.getItem(KEY),legacy=localStorage.getItem('echoglow_state');remember=Boolean(saved||legacy);state=saved?C.normalize(JSON.parse(saved)):C.migrate(JSON.parse(legacy||'null'));}catch{storageWorks=false;}
-function save(){clearTimeout(saveTimer);try{if(remember)localStorage.setItem(KEY,JSON.stringify(state));else{localStorage.removeItem(KEY);localStorage.removeItem('echoglow_state');}storageWorks=true;$('save-status').textContent=remember?'已保存在此设备':'本次使用不留记录';}catch{storageWorks=false;$('save-status').textContent='暂未保存';}}
+try{const saved=localStorage.getItem(KEY),prev=localStorage.getItem(LEGACY_KEYS[0]),legacy=localStorage.getItem(LEGACY_KEYS[1]);remember=Boolean(saved||prev||legacy);state=saved?C.normalize(JSON.parse(saved)):C.migrate(JSON.parse(prev||legacy||'null'));}catch{storageWorks=false;}
+function save(){clearTimeout(saveTimer);try{if(remember)localStorage.setItem(KEY,JSON.stringify(state));else localStorage.removeItem(KEY);LEGACY_KEYS.forEach(k=>localStorage.removeItem(k));storageWorks=true;$('save-status').textContent=remember?'已保存在此设备':'本次使用不留记录';}catch{storageWorks=false;$('save-status').textContent='暂未保存';}}
 function saveSoon(){clearTimeout(saveTimer);if(!remember){$('save-status').textContent='本次使用不留记录';return;}$('save-status').textContent='正在保存…';saveTimer=setTimeout(save,250);}
 function toast(message){clearTimeout(toastTimer);$('toast').textContent=message;$('toast').classList.add('show');toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3200);}
 function makeButton(label,classes,handler){const b=document.createElement('button');b.type='button';b.className=classes;b.textContent=label;b.addEventListener('click',handler);return b;}
@@ -62,7 +62,7 @@ $('personal-note').addEventListener('input',e=>{state.note=e.target.value;$('not
 $('card-editor').addEventListener('input',e=>{state[draftKey()]=e.target.value;fitEditor();saveSoon();});
 $('refresh-card').addEventListener('click',()=>{if(state[draftKey()]!==null&&!confirm('重新整理会替换这张卡片中手动修改的文字。继续吗？'))return;state[draftKey()]=null;renderCard();save();toast('已按你的选择重新整理');});
 $('copy-card').addEventListener('click',()=>copyText($('card-editor').value));
-$('share-card').addEventListener('click',async()=>{const text=$('card-editor').value.trim();if(!text){toast('先写一点想分享的话');return;}if(!navigator.share){copyText(text);toast('这台设备不支持直接分享，已尝试复制文字');return;}try{await navigator.share({title:recipient==='doctor'?'EchoGlow 就诊前整理':'EchoGlow 给亲友的便笺',text});}catch(e){if(e.name!=='AbortError')toast('分享未完成，可以复制文字发送');}});
+$('share-card').addEventListener('click',async()=>{const text=$('card-editor').value.trim();if(!text){toast('先写一点想分享的话');return;}if(!navigator.share){copyText(text);toast('这台设备不支持直接分享，已尝试复制文字');return;}try{await navigator.share({title:recipient==='doctor'?'显影 就诊前整理':'显影 给亲友的便笺',text});}catch(e){if(e.name!=='AbortError')toast('分享未完成，可以复制文字发送');}});
 function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);}
 function wrapText(ctx,text,maxWidth){const lines=[];for(const paragraph of text.split('\n')){if(!paragraph){lines.push('');continue;}let line='';for(const char of paragraph){if(ctx.measureText(line+char).width>maxWidth&&line){lines.push(line);line=char;}else line+=char;}lines.push(line);}return lines;}
 $('download-card').addEventListener('click',async()=>{
@@ -79,7 +79,7 @@ $('download-card').addEventListener('click',async()=>{
     const g=ctx.createLinearGradient(0,0,out.width,340);g.addColorStop(0,doctor?'#d5dce1':'#d2c3e3');g.addColorStop(1,doctor?'#e7e9e6':'#f0e9ed');ctx.fillStyle=g;ctx.fillRect(0,0,out.width,320);
     ctx.strokeStyle=doctor?'#697e881c':'#8e779d22';
     for(let i=0;i<5;i++){ctx.beginPath();ctx.arc(1020,40,90+i*38,0,Math.PI*2);ctx.stroke();}
-    ctx.fillStyle='#655971';ctx.font='600 28px "Segoe UI",sans-serif';ctx.fillText('EchoGlow',88,80);ctx.font='18px sans-serif';ctx.fillText('回声微光',250,80);ctx.textAlign='right';ctx.fillText($('card-date').textContent,992,80);ctx.textAlign='left';
+    ctx.fillStyle='#655971';ctx.font='600 28px "Segoe UI",sans-serif';ctx.fillText('显影',88,80);ctx.font='18px sans-serif';ctx.fillText('让感受先有形状',250,80);ctx.textAlign='right';ctx.fillText($('card-date').textContent,992,80);ctx.textAlign='left';
     ctx.font='18px "Segoe UI",sans-serif';ctx.fillStyle='#83718f';ctx.fillText($('letter-category').textContent,88,155);
     ctx.font='40px "Microsoft YaHei",sans-serif';ctx.fillStyle='#463c50';ctx.fillText($('letter-title').textContent,88,220);
     ctx.fillStyle='#ffffff35';ctx.fillRect(64,284,952,out.height-432);
@@ -87,7 +87,7 @@ $('download-card').addEventListener('click',async()=>{
     const footer=out.height-180;ctx.setLineDash([3,7]);ctx.strokeStyle='#897b924d';ctx.beginPath();ctx.moveTo(88,footer);ctx.lineTo(992,footer);ctx.stroke();ctx.setLineDash([]);
     ctx.fillStyle='#71627d';ctx.font='24px "Microsoft YaHei",sans-serif';ctx.fillText('不必一次说清楚。',88,footer+47);ctx.font='19px sans-serif';ctx.fillText('谢谢你，愿意听见此刻的我。',88,footer+82);ctx.font='46px serif';ctx.fillText('✳',930,footer+61);
     ctx.font='14px "Segoe UI",sans-serif';ctx.fillStyle='#9b8ea3';ctx.fillText('MY FEELINGS, IN MY OWN WORDS.',88,out.height-34);ctx.textAlign='right';ctx.fillText('一 点 微 光',992,out.height-34);
-    const blob=await new Promise(resolve=>out.toBlob(resolve,'image/png'));if(!blob)throw Error('empty image');downloadBlob(blob,'EchoGlow-'+(doctor?'就诊记录':'亲友便笺')+'.png');toast('卡片图片已生成');
+    const blob=await new Promise(resolve=>out.toBlob(resolve,'image/png'));if(!blob)throw Error('empty image');downloadBlob(blob,'显影-'+(doctor?'就诊记录':'亲友便笺')+'.png');toast('卡片图片已生成');
   }catch{toast('图片未能生成，可以先复制文字');}finally{button.disabled=false;}
 });
 
@@ -126,9 +126,9 @@ window.addEventListener('pagehide',()=>{pauseBreath();save();});
 $('open-data').addEventListener('click',()=>{clearArmed=false;$('clear-data').textContent='清除本地记录';$('data-dialog').showModal();});
 // A mobile entry remains available when the side rail is collapsed.
 const mobileData=makeButton('本地记录','text-button',()=>$('open-data').click());mobileData.style.fontSize='inherit';document.querySelector('.main-footer').append(mobileData);
-$('export-data').addEventListener('click',()=>{save();downloadBlob(new Blob([JSON.stringify({exportedAt:new Date().toISOString(),state},null,2)],{type:'application/json'}),'EchoGlow-record.json');toast('记录副本已生成');});
+$('export-data').addEventListener('click',()=>{save();downloadBlob(new Blob([JSON.stringify({exportedAt:new Date().toISOString(),state},null,2)],{type:'application/json'}),'显影-记录.json');toast('记录副本已生成');});
 $('remember-data').addEventListener('change',e=>{remember=e.target.checked;save();updateStateViews();toast(remember?'已开启本地保存':'已停止保存并清除浏览器记录');});
-$('clear-data').addEventListener('click',()=>{if(!clearArmed){clearArmed=true;$('clear-data').textContent='确认清除情绪选择和卡片草稿';return;}clearTimeout(saveTimer);try{localStorage.removeItem(KEY);localStorage.removeItem('echoglow_state');}catch{toast('无法清除，请在浏览器设置中管理此网站数据');return;}remember=false;riskLevel='';state=C.defaults();updateStateViews();renderSafety();$('poem').textContent='有些感受，还没有名字。\n你可以慢慢找到它的形状。';$('poem-status').textContent='选择不会自动生成文字，由你决定何时开始';$('generate').innerHTML='整理成一句话 <span>↗</span>';renderCard();resetBreath();syncWeather();$('data-dialog').close();$('save-status').textContent='本地记录已清除';toast('本地记录已清除');});
+$('clear-data').addEventListener('click',()=>{if(!clearArmed){clearArmed=true;$('clear-data').textContent='确认清除情绪选择和卡片草稿';return;}clearTimeout(saveTimer);try{localStorage.removeItem(KEY);LEGACY_KEYS.forEach(k=>localStorage.removeItem(k));}catch{toast('无法清除，请在浏览器设置中管理此网站数据');return;}remember=false;riskLevel='';state=C.defaults();updateStateViews();renderSafety();$('poem').textContent='有些感受，还没有名字。\n你可以慢慢找到它的形状。';$('poem-status').textContent='选择不会自动生成文字，由你决定何时开始';$('generate').innerHTML='整理成一句话 <span>↗</span>';renderCard();resetBreath();syncWeather();$('data-dialog').close();$('save-status').textContent='本地记录已清除';toast('本地记录已清除');});
 $('data-dialog').addEventListener('click',e=>{if(e.target===$('data-dialog')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();}});
 const date=new Date();$('today').textContent=date.toLocaleDateString('zh-CN',{month:'2-digit',day:'2-digit'}).replace('/',' / ');$('card-date').textContent=date.toLocaleDateString('zh-CN');
 updateStateViews();renderSafety();if(state.poem){$('poem').textContent=state.poem;$('poem-status').textContent='上次留给自己的文字';$('generate').innerHTML='换一种说法 <span>↻</span>';}if(!storageWorks)$('save-status').textContent='暂未保存';else $('save-status').textContent=remember?'已保存在此设备':'本次使用不留记录';renderBreath();syncWeather();

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#10121c"><meta name="description" content="用形状表达此刻，把难以开口的感受，整理成可以分享的话。">
-  <title>EchoGlow · 回声微光</title>
+  <title>显影</title>
   <link rel="stylesheet" href="style.css">
   <script src="core.js" defer></script><script src="visual.js" defer></script><script src="app.js" defer></script>
 </head>
@@ -11,7 +11,7 @@
 <a class="skip" href="#main">跳到内容</a>
 <div class="shell">
   <aside class="sidebar">
-    <a href="#" class="brand" aria-label="EchoGlow 首页"><span class="brand-mark" aria-hidden="true">◒</span><span>EchoGlow<small>回 声 微 光</small></span></a>
+    <a href="#" class="brand" aria-label="显影 首页"><span class="brand-mark" aria-hidden="true">◒</span><span>显影<small>让感受先有形状</small></span></a>
     <div class="side-caption">一个容纳此刻的地方</div>
     <nav aria-label="主要功能">
       <button class="nav-item active" data-view="echo" aria-current="page"><span class="nav-number">01</span><span>情绪显影<small>让感受有形状</small></span><span class="nav-arrow">↗</span></button>
@@ -54,14 +54,14 @@
           <label for="personal-note" class="note-label">还有想补充的话 <span class="muted">选填</span></label><textarea id="personal-note" maxlength="500" rows="4" placeholder="比如：今天暂时接不了电话，可以先发消息吗？"></textarea><span class="note-count" id="note-count">0 / 500</span>
           <button id="refresh-card" class="secondary-button">重新整理卡片 ↻</button><p class="field-hint">右侧文字可直接编辑。改好后，再复制或保存图片。</p>
         </div>
-        <div class="card-column"><div class="panel-caption"><span id="card-caption">一张留给亲友的便笺</span><span>可编辑</span></div><div class="message-paper"><div class="paper-top"><span>EchoGlow <small>回声微光</small></span><span id="card-date"></span></div><div class="letter-heading"><span id="letter-category">A LITTLE NOTE FOR YOU</span><h2 id="letter-title">今天，借一张纸开口。</h2><span class="letter-seal" aria-hidden="true">◒</span></div><label class="sr-only" for="card-editor">卡片正文</label><textarea id="card-editor" spellcheck="false" maxlength="5000"></textarea><div class="paper-footer"><span>不必一次说清楚。<small>谢谢你，愿意听见此刻的我。</small></span><span aria-hidden="true">✳</span></div><div class="paper-bottom"><span>MY FEELINGS, IN MY OWN WORDS.</span><span>一 点 微 光</span></div></div><div class="card-actions"><button id="share-card" class="primary-button">直接分享 ↗</button><button id="copy-card" class="secondary-button">复制文字</button><button id="download-card" class="secondary-button">保存图片</button></div><p class="field-hint centered">优先分享文字，图片适合留存；只发送你愿意分享的部分。</p></div>
+        <div class="card-column"><div class="panel-caption"><span id="card-caption">一张留给亲友的便笺</span><span>可编辑</span></div><div class="message-paper"><div class="paper-top"><span>显影 <small>让感受先有形状</small></span><span id="card-date"></span></div><div class="letter-heading"><span id="letter-category">A LITTLE NOTE FOR YOU</span><h2 id="letter-title">今天，借一张纸开口。</h2><span class="letter-seal" aria-hidden="true">◒</span></div><label class="sr-only" for="card-editor">卡片正文</label><textarea id="card-editor" spellcheck="false" maxlength="5000"></textarea><div class="paper-footer"><span>不必一次说清楚。<small>谢谢你，愿意听见此刻的我。</small></span><span aria-hidden="true">✳</span></div><div class="paper-bottom"><span>MY FEELINGS, IN MY OWN WORDS.</span><span>一 点 微 光</span></div></div><div class="card-actions"><button id="share-card" class="primary-button">直接分享 ↗</button><button id="copy-card" class="secondary-button">复制文字</button><button id="download-card" class="secondary-button">保存图片</button></div><p class="field-hint centered">优先分享文字，图片适合留存；只发送你愿意分享的部分。</p></div>
       </div>
     </section>
     <section id="view-breathe" class="view" hidden aria-labelledby="breath-title">
       <div class="view-heading"><div><p class="eyebrow">03 — 微光呼吸</p><h1 id="breath-title">这一分钟，不用赶路。</h1><p class="subtitle">按自己的舒适程度跟随。也可以只安静地待一会儿。</p></div><button id="sound-toggle" class="secondary-button" aria-pressed="false">开启海浪声 ♫</button></div>
       <div class="breath-space"><div class="breath-meta"><span id="breath-session">还没有开始</span><span id="breath-cycles">0 次完整呼吸</span></div><div class="breath-orbit"><div id="breath-glow"></div><div class="breath-center"><p id="breath-phase">准备好了，再开始</p><span id="breath-count">✳</span><small id="breath-next">跟随你的节奏</small></div></div><div class="breath-patterns" role="group" aria-label="呼吸节奏"><button class="active" data-pattern="soft" aria-pressed="true">轻缓 <span>吸 4 · 呼 6</span></button><button data-pattern="classic" aria-pressed="false">含停顿 <span>吸 4 · 停 4 · 呼 4</span></button></div><div class="breath-actions"><button class="primary-button" id="breath-start">开始呼吸 <span>→</span></button><button class="text-button" id="breath-reset">重新开始 ↻</button></div><p class="field-hint centered">不要用力深呼吸。头晕、胸痛或呼吸困难时请立即停止，并按需要寻求医疗帮助。</p><details class="grounding-card"><summary>不想关注呼吸？做一个落地练习</summary><ol><li>说出你现在所在的地方和日期。</li><li>感受双脚与地面的接触。</li><li>找出眼前 5 样东西、能触到的 4 样东西、听见的 3 种声音。</li></ol></details></div>
     </section>
-    <footer class="main-footer"><span>ECHOGLOW — 给难以言说的感受，一点微光。</span><span>本地生成 · 无需登录</span></footer>
+    <footer class="main-footer"><span>显影 — 给难以言说的感受，一点微光。</span><span>本地生成 · 无需登录</span></footer>
   </main>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>

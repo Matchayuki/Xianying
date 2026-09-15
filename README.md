@@ -1,6 +1,6 @@
 <div align="center">
 
-# EchoGlow · 回声微光
+# 显影
 
 **给说不出口的人，一个能递出去的东西**
 
@@ -9,9 +9,9 @@
 
 <br>
 
-<a href="https://matchayuki.github.io/EchoGlow-Studio/"><img src="https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E7%89%88-%E7%AB%8B%E5%8D%B3%E4%BD%93%E9%AA%8C-1E3A5F?style=for-the-badge&labelColor=121620" alt="立即体验在线版"></a>
+<a href="https://matchayuki.github.io/Xianying/"><img src="https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E7%89%88-%E7%AB%8B%E5%8D%B3%E4%BD%93%E9%AA%8C-1E3A5F?style=for-the-badge&labelColor=121620" alt="立即体验在线版"></a>
 
-### 🔗 https://matchayuki.github.io/EchoGlow-Studio/
+### 🔗 https://matchayuki.github.io/Xianying/
 
 打开即用 · 无需注册 · 无第三方请求 · 默认不保存
 
@@ -28,7 +28,7 @@
 
 > 「窗外有一场大雾，或者雾就在房间里……不用去翻译自己，不用向谁解释。天亮还很远，我们可以先不说话。」
 >
-> <div align="right">—— EchoGlow 生成的一段通感诗译</div>
+> <div align="right">—— 显影 生成的一段通感诗译</div>
 
 <br>
 
@@ -99,7 +99,7 @@
 - 如果失语是语言问题，那**给一个输入框是没用的**——他不缺地方说话，他缺话。
 - 如果自反性无能是行动问题，那**喊"加油"是没用的**——他不缺鼓励，他缺的是一个**不需要先相信就能完成**的动作。
 
-EchoGlow 因此给自己定了三条规矩：
+显影 因此给自己定了三条规矩：
 
 <table>
 <tr><th width="16%"></th><th></th></tr>
@@ -234,7 +234,7 @@ EchoGlow 因此给自己定了三条规矩：
 
 一句评审把整个项目拉回了地面：
 
-> **EchoGlow 现在是一个视觉完成度很高的概念样机，但还不是能放心交给真实脆弱用户使用的心理产品。最大缺陷不在审美，而在——它接住了情绪，却没有接住风险。**
+> **显影 现在是一个视觉完成度很高的概念样机，但还不是能放心交给真实脆弱用户使用的心理产品。最大缺陷不在审美，而在——它接住了情绪，却没有接住风险。**
 
 <table>
 <tr><th width="46%">评审指出的问题</th><th>3.0 的做法</th></tr>
@@ -329,7 +329,7 @@ node build.cjs   # 构建，产物在 dist/
 
 ### 姊妹项目
 
-[**在场**](https://github.com/Matchayuki/Zaichang) —— EchoGlow 帮**说出口的那个人**，在场帮**收到消息、却不知道怎么回的那个人**。两者没有账号、数据或运行依赖，是两个各自独立的入口：求助者的表达和接收者的回应，不应该共享一份数据。
+[**在场**](https://github.com/Matchayuki/Zaichang) —— 显影 帮**说出口的那个人**，在场帮**收到消息、却不知道怎么回的那个人**。两者没有账号、数据或运行依赖，是两个各自独立的入口：求助者的表达和接收者的回应，不应该共享一份数据。
 
 ---
 
@@ -354,6 +354,6 @@ node build.cjs   # 构建，产物在 dist/
 
 **如果你现在说不出话，先不用说话。**
 
-<a href="https://matchayuki.github.io/EchoGlow-Studio/"><img src="https://img.shields.io/badge/%E6%89%93%E5%BC%80%20EchoGlow-1E3A5F?style=for-the-badge&labelColor=121620" alt="打开 EchoGlow"></a>
+<a href="https://matchayuki.github.io/Xianying/"><img src="https://img.shields.io/badge/%E6%89%93%E5%BC%80%20%E6%98%BE%E5%BD%B1-1E3A5F?style=for-the-badge&labelColor=121620" alt="打开 显影"></a>
 
 </div>
